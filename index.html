@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Research Report: Post-Pandemic Consumer Behavior in Online Grocery Shopping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA is designed as a narrative journey to make the academic research accessible. It starts with a compelling header question, followed by the research background. The core is an an interactive "Research Model" section where users can click on different factors (e.g., Perceived Risk) to see their definitions and impact, which dynamically updates a Chart.js visualization. This is followed by a brief methodology section for credibility and concludes with actionable "Business Insights." This structure transforms a static paper into an exploratory experience, prioritizing user understanding and engagement over a rigid academic format. -->
+    <!-- Visualization & Content Choices: The central research model is visualized using HTML/CSS Flexbox to create an interactive diagram (Goal: Organize/Relate). Clicking a factor updates a text area and highlights a corresponding bar in a Chart.js horizontal bar chart (Goal: Compare). This interaction (Report Info -> User Click -> Dynamic Update) makes the statistical findings intuitive. The bar chart visualizes the positive/negative impact of each factor on consumer attitude, which is more engaging than text alone. All elements are built with standard web technologies, confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .factor-box {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .factor-box.active {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: #A88B79;
+            color: #FFFFFF;
+        }
+        .content-card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="text-center py-12 md:py-20 px-4" style="background-color: #F7F2EC;">
+        <h1 class="text-3xl md:text-5xl font-bold text-[#6D5B4F] mb-4">Will Our Pandemic Habits Persist?</h1>
+        <div class="max-w-3xl mx-auto text-left">
+            <p class="text-lg md:text-xl text-gray-600">An Interactive Research Report on Post-Pandemic Consumer Behavior in Online Grocery Shopping.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+
+        <section id="background" class="mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#A88B79] mb-8">Research Background: From Necessity to Habit</h2>
+            <div class="content-card rounded-lg p-6 md:p-8 max-w-4xl mx-auto">
+                <p class="text-base md:text-lg leading-relaxed">The <strong>COVID-19 pandemic</strong> reshaped global life, forcing many activities online. The <strong>"stay-at-home economy"</strong> boomed, with <strong>online grocery shopping</strong> becoming a daily routine for many. As the pandemic subsides, a key question for businesses arises: will these new habits stick around, or will consumers return to old ways?</p>
+                <p class="text-base md:text-lg leading-relaxed mt-4">This study explores the psychological factors influencing the <strong>continued use</strong> of online grocery services, providing <strong>actionable insights</strong> for e-commerce and retail managers.</p>
+            </div>
+        </section>
+
+        <section id="model" class="mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#A88B79] mb-2">Research Model & Key Findings</h2>
+            <p class="text-center text-gray-600 mb-8">Click on the factors below to explore how they influence consumer attitudes.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <div class="grid grid-cols-2 gap-4 w-full max-w-md">
+                        <div id="factor-satisfaction" class="factor-box content-card p-4 text-center rounded-lg">
+                            <h3 class="font-semibold">Prior Satisfaction</h3>
+                        </div>
+                        <div id="factor-risk" class="factor-box content-card p-4 text-center rounded-lg">
+                            <h3 class="font-semibold">Perceived Risk</h3>
+                        </div>
+                        <div id="factor-habit" class="factor-box content-card p-4 text-center rounded-lg">
+                            <h3 class="font-semibold">Habit</h3>
+                        </div>
+                        <div id="factor-cost" class="factor-box content-card p-4 text-center rounded-lg">
+                            <h3 class="font-semibold">Switching Costs</h3>
+                        </div>
+                    </div>
+
+                    <div class="text-4xl text-gray-400">↓</div>
+
+                    <div class="w-full max-w-xs">
+                        <div id="factor-attitude" class="factor-box content-card p-4 text-center rounded-lg bg-[#6D5B4F] text-white">
+                            <h3 class="font-bold">Attitude</h3>
+                        </div>
+                    </div>
+
+                    <div class="text-4xl text-gray-400">↓</div>
+
+                    <div class="w-full max-w-xs">
+                         <div class="content-card p-4 text-center rounded-lg bg-gray-100">
+                            <h3 class="font-semibold">Continued Use</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-card rounded-lg p-6 md:p-8 min-h-[300px]">
+                    <h3 id="result-title" class="text-xl font-bold text-[#A88B79] mb-4">Click on a Factor to Learn More</h3>
+                    <p id="result-text" class="text-lg leading-relaxed">This section will provide a detailed explanation of each factor and its impact on consumer attitudes, based on the research findings.</p>
+                    <p id="result-hypo" class="text-base text-gray-500 mt-4"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="visualization" class="mb-16">
+             <h2 class="text-2xl md:text-3xl font-bold text-center text-[#A88B79] mb-8">Impact & Survey Data Visualization</h2>
+             <div class="content-card rounded-lg p-6 md:p-8 max-w-4xl mx-auto">
+                <p class="text-center text-gray-600 mb-4">The chart below visualizes the <strong>standardized coefficients</strong> (influence) of each factor on consumer attitude. A positive value indicates a <strong>positive relationship</strong>.</p>
+                <div class="chart-container">
+                    <canvas id="impactChart"></canvas>
+                </div>
+                <div class="mt-8">
+                    <h3 class="font-bold text-xl text-center mb-4 text-[#6D5B4F]">Survey Respondent Demographics</h3>
+                    <p class="text-center text-gray-600 mb-4">Data collected from <strong>400 valid survey responses</strong> provides insights into the demographic profile of participants.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="chart-container">
+                           <canvas id="genderChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="ageChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="frequencyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <section id="methodology" class="mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#A88B79] mb-8">Research Methodology</h2>
+            <div class="content-card rounded-lg p-6 md:p-8 max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-bold text-xl text-[#6D5B4F] mb-2">📊 Data Analysis Methods</h3>
+                        <p class="text-base leading-relaxed text-gray-600">The study used <strong>IBM AMOS 22</strong> for data analysis. The primary methods included: <strong>Descriptive Statistical Analysis</strong>, <strong>Reliability and Validity Analysis</strong>, and <strong>Structural Equation Modeling (SEM)</strong>.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-[#6D5B4F] mb-2">🔬 Sampling & Survey Design</h3>
+                        <p class="text-base leading-relaxed text-gray-600">The survey was conducted from <strong>Feb 14 to Mar 12, 2022</strong>, gathering <strong>400 valid responses</strong>. The target demographic included consumers in Taiwan who had purchased fresh groceries online since 2020. The survey underwent <strong>pre-testing</strong> to ensure clarity and logical flow.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="insights" class="mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#A88B79] mb-8">Managerial Implications</h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="content-card rounded-lg p-6">
+                    <h3 class="font-bold text-lg mb-2 text-[#6D5B4F]">🚀 Focus on Satisfaction</h3>
+                    <p>Since <strong>Prior Satisfaction</strong> positively influences attitude, businesses should prioritize a seamless customer experience, from easy-to-use interfaces to timely delivery and quality products. This builds trust and encourages repeat purchases.</p>
+                </div>
+                <div class="content-card rounded-lg p-6">
+                    <h3 class="font-bold text-lg mb-2 text-[#6D5B4F]">🛡️ Build Trust & Mitigate Risk</h3>
+                    <p>While <strong>Perceived Risk</strong> was not significant, cultivating trust remains essential. Businesses should offer transparent product information (e.g., origin, certifications) and clear return policies to reduce potential anxiety for new and existing users.</p>
+                </div>
+                <div class="content-card rounded-lg p-6">
+                    <h3 class="font-bold text-lg mb-2 text-[#6D5B4F]">🔄 Cultivate Habit</h3>
+                    <p>The positive impact of <strong>Habit</strong> on attitude proves its power. Loyalty programs, subscription services, and personalized recommendations can integrate online shopping into the consumer's routine, increasing customer stickiness and long-term use.</p>
+                </div>
+                <div class="content-card rounded-lg p-6">
+                    <h3 class="font-bold text-lg mb-2 text-[#6D5B4F]">🔒 Increase Switching Costs</h3>
+                    <p>Although <strong>Switching Costs</strong> were not significant, managers can still use strategies like reward points, member tiers, and exclusive deals. When customers invest more in a platform, they are less likely to switch to a competitor.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="conclusion" class="bg-[#F7F2EC] py-12 rounded-lg">
+            <div class="max-w-2xl mx-auto px-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-[#A88B79] mb-4">Conclusion</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">This project demonstrates that the future of online grocery depends on a data-driven approach. By leveraging insights from customer behavior, businesses can focus on building <strong>customer satisfaction</strong> and <strong>ingraining purchasing habits</strong>, which are the true drivers of continued use. These findings empower managers to prioritize key areas, leading to more effective customer retention strategies and sustainable business growth in a competitive market.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 mt-8 border-t border-gray-200">
+        <p class="text-gray-500">A data portfolio project by Daniel Yeh, based on his Master of business administration thesis.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const factorsData = {
+                'satisfaction': {
+                    title: 'Prior Satisfaction (H2 Supported)',
+                    text: 'The research found a <strong>positive and significant impact</strong> of <strong>Prior Satisfaction</strong> on <strong>Attitude</strong>. This indicates that a consumer’s positive past experience is key to building a favorable attitude.',
+                    value: 0.591
+                },
+                'risk': {
+                    title: 'Perceived Risk (H1 Not Supported)',
+                    text: 'The research found no <strong>significant relationship</strong> between <strong>Perceived Risk</strong> and <strong>Attitude</strong>. This suggests that consumers may have grown accustomed to the risks of online grocery shopping and believe the benefits outweigh the drawbacks.',
+                    value: -0.059
+                },
+                'habit': {
+                    title: 'Habit (H3 Supported)',
+                    text: 'The research found a <strong>positive and significant impact</strong> of <strong>Habit</strong> on <strong>Attitude</strong>. This means that once a consumer develops the habit of buying groceries online, their attitude towards the behavior becomes more positive.',
+                    value: 0.25
+                },
+                'cost': {
+                    title: 'Switching Costs (H4 Not Supported)',
+                    text: 'The research found no <strong>significant relationship</strong> between <strong>Switching Costs</strong> and <strong>Attitude</strong>. This may be because the cost of returning to traditional shopping methods is not high enough to influence consumer attitudes.',
+                    value: 0.059
+                },
+                'attitude': {
+                    title: 'Attitude (H5 Supported)',
+                    text: 'The research found a <strong>positive and significant impact</strong> of <strong>Attitude</strong> on <strong>Continued Use</strong>. This indicates that a positive attitude towards online grocery shopping is a strong predictor of a consumer’s continued use of the service. <br><br>The **standardized estimate of 0.728** and a **p-value < 0.001** demonstrate a very strong and statistically significant positive relationship between a customer\'s attitude and their likelihood of continued use. This finding is a cornerstone for business strategy.',
+                    value: 0.728
+                }
+            };
+
+            const resultTitle = document.getElementById('result-title');
+            const resultText = document.getElementById('result-text');
+            const factorBoxes = document.querySelectorAll('.factor-box');
+            let activeFactor = null;
+
+            const chartCanvas = document.getElementById('impactChart');
+            const chartCtx = chartCanvas.getContext('2d');
+            const chartData = {
+                labels: Object.values(factorsData).slice(0, -1).map(f => f.title.split('(')[0].trim()),
+                datasets: [{
+                    label: 'Impact on Attitude (Standardized Estimate)',
+                    data: Object.values(factorsData).slice(0, -1).map(f => f.value),
+                    backgroundColor: Object.values(factorsData).slice(0, -1).map(f => f.value > 0 ? 'rgba(168, 139, 121, 0.6)' : 'rgba(156, 163, 175, 0.6)'),
+                    borderColor: Object.values(factorsData).slice(0, -1).map(f => f.value > 0 ? 'rgba(168, 139, 121, 1)' : 'rgba(156, 163, 175, 1)'),
+                    borderWidth: 1
+                }]
+            };
+
+            const impactChart = new Chart(chartCtx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Impact Value'
+                            },
+                            beginAtZero: false,
+                            grid: {
+                                color: '#F0F0F0'
+                            }
+                        },
+                        y: {
+                           grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            function updateDisplay(factorId) {
+                if (!factorsData[factorId]) return;
+                const data = factorsData[factorId];
+                resultTitle.innerHTML = data.title;
+                resultText.innerHTML = data.text;
+                
+                factorBoxes.forEach(box => {
+                    box.classList.remove('active');
+                });
+                const currentBox = document.getElementById(`factor-${factorId}`);
+                if (currentBox) {
+                    currentBox.classList.add('active');
+                }
+                activeFactor = factorId;
+                
+                updateChartHighlight(factorId);
+            }
+
+            function updateChartHighlight(factorId) {
+                const factorIndex = Object.keys(factorsData).slice(0, -1).indexOf(factorId);
+                const backgroundColors = chartData.datasets[0].backgroundColor.map((color, index) => {
+                    if (index === factorIndex) {
+                         return factorsData[factorId].value > 0 ? 'rgba(110, 91, 79, 1)' : 'rgba(75, 85, 99, 1)';
+                    }
+                    return factorsData[Object.keys(factorsData)[index]].value > 0 ? 'rgba(168, 139, 121, 0.6)' : 'rgba(156, 163, 175, 0.6)';
+                });
+                const borderColors = chartData.datasets[0].borderColor.map((color, index) => {
+                     if (index === factorIndex) {
+                        return factorsData[factorId].value > 0 ? 'rgba(110, 91, 79, 1)' : 'rgba(55, 65, 81, 1)';
+                    }
+                    return factorsData[Object.keys(factorsData)[index]].value > 0 ? 'rgba(168, 139, 121, 1)' : 'rgba(156, 163, 175, 1)';
+                });
+                impactChart.data.datasets[0].backgroundColor = backgroundColors;
+                impactChart.data.datasets[0].borderColor = borderColors;
+                impactChart.update();
+            }
+
+            factorBoxes.forEach(box => {
+                box.addEventListener('click', () => {
+                    const factorId = box.id.replace('factor-', '');
+                    updateDisplay(factorId);
+                });
+            });
+
+            const genderData = {
+                labels: ['Female (66.8%)', 'Male (33.2%)'],
+                datasets: [{
+                    data: [267, 133],
+                    backgroundColor: ['#A88B79', '#D4C8C0'],
+                    borderColor: ['#fff', '#fff']
+                }]
+            };
+
+            const ageData = {
+                labels: ['41-50 (27.8%)', 'Other'],
+                datasets: [{
+                    data: [111.2, 288.8],
+                    backgroundColor: ['#A88B79', '#D4C8C0'],
+                    borderColor: ['#fff', '#fff']
+                }]
+            };
+
+            const frequencyData = {
+                labels: ['Once a week (57.8%)', 'Other'],
+                datasets: [{
+                    data: [231.2, 168.8],
+                    backgroundColor: ['#A88B79', '#D4C8C0'],
+                    borderColor: ['#fff', '#fff']
+                }]
+            };
+            
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(document.getElementById('genderChart').getContext('2d'), {
+                type: 'doughnut',
+                data: genderData,
+                options: commonOptions
+            });
+
+            new Chart(document.getElementById('ageChart').getContext('2d'), {
+                type: 'doughnut',
+                data: ageData,
+                options: commonOptions
+            });
+            
+            new Chart(document.getElementById('frequencyChart').getContext('2d'), {
+                type: 'doughnut',
+                data: frequencyData,
+                options: commonOptions
+            });
+
+            updateDisplay('satisfaction');
+        });
+    </script>
+</body>
+</html>
